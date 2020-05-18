@@ -5,25 +5,12 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
         primarySwatch: Colors.blue,
-        // This makes the visual density adapt to the platform that you run
-        // the app on. For desktop platforms, the controls will be smaller and
-        // closer together (more dense) than on mobile platforms.
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       home: MyHomePage(title: 'Simple Calculator'),
@@ -34,15 +21,6 @@ class MyApp extends StatelessWidget {
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key key, this.title}) : super(key: key);
 
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
   final String title;
 
   @override
@@ -52,6 +30,9 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   String displayString = '0';
   String numberString = '0';
+  double result = 0;
+  String operation;
+  bool shouldCalculate = false;
 
   Widget createRow(String title1, String title2, String title3, String title4) {
     return Expanded(
@@ -93,20 +74,53 @@ class _MyHomePageState extends State<MyHomePage> {
   pressButton(String title) {
     setState(() {
       if (title == '+' || title == '-' || title == '*' || title == '/') {
+        if (shouldCalculate) {
+          calculate();
+        } else {
+          result = double.parse(numberString) ?? 0;
+          shouldCalculate = true;
+        }
         numberString = '';
-    } else if (title == '=') {
+        operation = title;
+      } else if (title == '=') {
+        calculate();
+        shouldCalculate = false;
 
-    } else if (title == 'CE') {
-      numberString = '';
-      displayString = '0';
-    } else {
-      if (numberString == '0' || numberString == '0.0') {
+      } else if (title == 'CE') {
         numberString = '';
+        displayString = '0';
+        result = 0;
+        shouldCalculate = false;
+      } else {
+        if (numberString == '0' || numberString == '0.0') {
+          numberString = '';
+        }
+        numberString += title;
+        displayString = numberString;
       }
-      numberString += title;
-      displayString = numberString;
-    }
     });
+  }
+
+  calculate() {
+    switch (operation) {
+      case '+':
+        result += double.parse(numberString);
+        break;
+      case '-':
+        result -= double.parse(numberString);
+        break;
+      case '*':
+        result *= double.parse(numberString);
+        break;
+      case '/':
+        result /= double.parse(numberString);
+        break;
+      default:
+        break;
+    }
+
+    numberString = result.toString();
+    displayString = numberString;
   }
 
   @override
