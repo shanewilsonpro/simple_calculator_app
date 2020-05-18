@@ -50,22 +50,41 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  String displayString = '0';
+
   Widget createRow(String title1, String title2, String title3, String title4) {
-    return Row(
-      children: <Widget>[
-        createButton(title1),
-        createButton(title2),
-        createButton(title3),
-        createButton(title4),
-      ],
+    return Expanded(
+      child: Row(
+        children: <Widget>[
+          createButton(title1),
+          createButton(title2),
+          createButton(title3),
+          createButton(title4),
+        ],
+      ),
     );
   }
 
   Widget createButton(String title) {
-    return ButtonTheme(
-      child: OutlineButton(
-        onPressed: null,
-        child: Text(title),
+    return Expanded(
+      child: ButtonTheme(
+        height: double.infinity,
+        child: OutlineButton(
+          onPressed: () => {},
+          child: Text(
+            title,
+            style: TextStyle(
+              fontSize: 30,
+              fontWeight: FontWeight.bold,
+              color: Colors.black,
+            ),
+          ),
+          borderSide: BorderSide(
+            color: Colors.grey,
+            width: 1,
+          ),
+          highlightedBorderColor: Colors.black,
+        ),
       ),
     );
   }
@@ -76,21 +95,34 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         title: Text(widget.title),
       ),
-      body: Center(
+      body: Padding(
+        padding: EdgeInsets.all(10.0),
         child: Column(
           children: <Widget>[
-            Container(
-              child: Text(
-                '0',
+            Expanded(
+              child: Container(
+                color: Color.fromARGB(10, 0, 0, 0),
+                child: Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: Align(
+                    alignment: FractionalOffset.bottomRight,
+                    child: Text(
+                      displayString,
+                      style: TextStyle(fontSize: 80),
+                    ),
+                  ),
+                ),
               ),
             ),
-            Column(
-              children: <Widget>[
-                createRow('+', '-', '*', '/'),
-                createRow('7', '8', '9', '0'),
-                createRow('4', '5', '6', 'CE'),
-                createRow('1', '2', '3', '='),
-              ],
+            Expanded(
+              child: Column(
+                children: <Widget>[
+                  createRow('+', '-', '*', '/'),
+                  createRow('7', '8', '9', '0'),
+                  createRow('4', '5', '6', 'CE'),
+                  createRow('1', '2', '3', '='),
+                ],
+              ),
             ),
           ],
         ),
