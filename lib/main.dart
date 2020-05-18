@@ -51,6 +51,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   String displayString = '0';
+  String numberString = '0';
 
   Widget createRow(String title1, String title2, String title3, String title4) {
     return Expanded(
@@ -70,7 +71,7 @@ class _MyHomePageState extends State<MyHomePage> {
       child: ButtonTheme(
         height: double.infinity,
         child: OutlineButton(
-          onPressed: () => {},
+          onPressed: () => pressButton(title),
           child: Text(
             title,
             style: TextStyle(
@@ -87,6 +88,25 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ),
     );
+  }
+
+  pressButton(String title) {
+    setState(() {
+      if (title == '+' || title == '-' || title == '*' || title == '/') {
+        numberString = '';
+    } else if (title == '=') {
+
+    } else if (title == 'CE') {
+      numberString = '';
+      displayString = '0';
+    } else {
+      if (numberString == '0' || numberString == '0.0') {
+        numberString = '';
+      }
+      numberString += title;
+      displayString = numberString;
+    }
+    });
   }
 
   @override
